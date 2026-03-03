@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.5.2">
   <diagram name="Page-1" id="ijm1_OzFcWU5VtBy2kwN">
-    <mxGraphModel dx="2935" dy="2345" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2775" dy="2249" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1360,7 +1360,7 @@
           <mxGeometry height="110" width="210" x="1750" y="490" as="geometry" />
         </mxCell>
         <mxCell id="Nrayc35RuTEF_3Z6zn7J-31" parent="HcP1zY84yW_0XIPi7S9S-1" style="ellipse;whiteSpace=wrap;html=1;align=center;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#000000;" value="&lt;span style=&quot;font-size: 21px;&quot;&gt;&lt;b&gt;&lt;u&gt;Log ID&lt;/u&gt;&lt;/b&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="110" width="210" x="1507.5" y="920" as="geometry" />
+          <mxGeometry height="110" width="210" x="1430" y="910" as="geometry" />
         </mxCell>
         <mxCell id="Nrayc35RuTEF_3Z6zn7J-32" edge="1" parent="HcP1zY84yW_0XIPi7S9S-1" source="Nrayc35RuTEF_3Z6zn7J-31" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeWidth=3;" target="Nrayc35RuTEF_3Z6zn7J-3" value="">
           <mxGeometry relative="1" as="geometry">
@@ -1396,6 +1396,15 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="2040" y="846" as="sourcePoint" />
             <mxPoint x="2121" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Nrayc35RuTEF_3Z6zn7J-40" parent="HcP1zY84yW_0XIPi7S9S-1" style="ellipse;whiteSpace=wrap;html=1;align=center;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#000000;" value="&lt;span style=&quot;font-size: 21px;&quot;&gt;&lt;b&gt;Transfer ID&lt;/b&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 21px;&quot;&gt;&lt;b&gt;(FK)&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="210" x="1740" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="Nrayc35RuTEF_3Z6zn7J-41" edge="1" parent="HcP1zY84yW_0XIPi7S9S-1" source="Nrayc35RuTEF_3Z6zn7J-40" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=3;" target="Nrayc35RuTEF_3Z6zn7J-3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2205" y="960" as="sourcePoint" />
+            <mxPoint x="2070" y="860" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
