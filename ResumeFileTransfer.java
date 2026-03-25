@@ -6,7 +6,6 @@ public class ResumeFileTransfer {
 
     public static void main(String[] args) {
 
-        //User selects Source File
         FileChooserUtil.chooseFile();
         String sourcePath = FileChooserUtil.selectedPath;
         String sourceFileName = FileChooserUtil.selectedFileName;
@@ -18,7 +17,6 @@ public class ResumeFileTransfer {
         System.out.println("Selected file path: " + sourcePath);
         System.out.println("Selected file name: " + sourceFileName);
 
-        //User selects Destination Folder
         FileChooserUtil.chooseFolderAndGetPath();
         String destFolder = FileChooserUtil.SelectedDestinationFolder;
 
@@ -28,11 +26,9 @@ public class ResumeFileTransfer {
         }
         System.out.println("Selected destination folder: " + destFolder);
 
-        //Construct destination file path
         File sourceFile = new File(sourcePath);
         File destFile = new File(destFolder);
 
-        //Log file beside destination file
         File logFile = new File(destFile.getAbsolutePath() + ".transfer.log");
 
         try {
