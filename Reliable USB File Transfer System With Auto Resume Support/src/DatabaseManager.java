@@ -1,9 +1,7 @@
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.*;
-
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
+
 
 public class DatabaseManager {
     
@@ -22,8 +20,7 @@ public class DatabaseManager {
 
         Reader reader = new FileReader(file);
 
-        List<jsonAttribute> list = gson.fromJson(reader,
-                new com.google.gson.reflect.TypeToken<List<jsonAttribute>>() {}.getType());
+        List<jsonAttribute> list = gson.fromJson(reader,new com.google.gson.reflect.TypeToken<List<jsonAttribute>>() {}.getType());
 
         reader.close();
 
@@ -31,7 +28,7 @@ public class DatabaseManager {
 
     } catch (Exception e) {
         e.printStackTrace();
-        return new ArrayList<>(); // ✅ never null
+        return new ArrayList<>(); 
     }
 }
 
@@ -49,7 +46,6 @@ public class DatabaseManager {
     try {
         List<jsonAttribute> list = readTransfers();
 
-        // ✅ FIX: handle null
         if (list == null) {
             list = new ArrayList<>();
         }
@@ -68,12 +64,14 @@ public class DatabaseManager {
 
 
     // 🔹 Update by transferId
-    public static void updateTransfer(String id, String newStatus) {
+    public static void updateTransfer(String id, String newStatus, String interruptStatus, String transferPercentage) {
         List<jsonAttribute> list = readTransfers();
 
         for (jsonAttribute t : list) {
             if (t.transferId.equals(id)) {
                 t.transferStatus = newStatus;
+                t.interruptStatus = interruptStatus;
+                t.transferPercentage = transferPercentage;
                 break;
             }
         }

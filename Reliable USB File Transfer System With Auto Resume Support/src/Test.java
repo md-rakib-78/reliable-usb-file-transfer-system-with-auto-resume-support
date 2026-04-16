@@ -22,7 +22,7 @@ public class Test {
         }
 
         // Update
-        DatabaseManager.updateTransfer("T1001", "Completed");
+       // DatabaseManager.updateTransfer("T1001", "Completed");
 
         // Delete
         DatabaseManager.deleteTransfer("T1001");

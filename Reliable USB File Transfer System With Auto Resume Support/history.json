@@ -1,56 +1,26 @@
 [
   {
     "si": "1",
-    "transferId": "T202306010001",
+    "transferId": "T0001",
     "fileName": "Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "destinationPath": "H://Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "fileExtension": "mkv",
-    "transferStatus": "Completed"
+    "transferStatus": "Interrupted",
+    "transferPercentage": "15.40",
+    "fileSize": "311",
+    "interruptStatus": "2"
   },
   {
     "si": "2",
     "transferId": "T0002",
-    "fileName": "Kaleidoscope.S01E05.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E05.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "destinationPath": "H://Kaleidoscope.S01E05.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "fileExtension": "mkv",
-    "transferStatus": "Completed"
-  },
-  {
-    "si": "3",
-    "transferId": "T0003",
-    "fileName": "Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "destinationPath": "H://Kaleidoscope.S01E04.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "fileExtension": "mkv",
-    "transferStatus": "Completed"
-  },
-  {
-    "si": "4",
-    "transferId": "T0004",
     "fileName": "Kaleidoscope.S01E07.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E07.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "destinationPath": "H://Kaleidoscope.S01E07.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "fileExtension": "mkv",
-    "transferStatus": "Completed"
-  },
-  {
-    "si": "5",
-    "transferId": "T202306010005",
-    "fileName": "Kaleidoscope.S01E06.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E06.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "destinationPath": "H://Kaleidoscope.S01E06.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "fileExtension": "mkv",
-    "transferStatus": "Completed"
-  },
-  {
-    "si": "6",
-    "transferId": "T0006",
-    "fileName": "Kaleidoscope.S01E01.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E01.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "destinationPath": "H://Kaleidoscope.S01E01.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
-    "fileExtension": "mkv",
-    "transferStatus": "Completed"
+    "transferStatus": "Completed",
+    "transferPercentage": "100.00",
+    "fileSize": "337",
+    "interruptStatus": "3"
   }
 ]
