@@ -9,6 +9,7 @@ import java.awt.*;
 public class ResumeFileTransfer extends ProgressBar {
 
     private static final int CHUNK_SIZE = 8 * 1024 * 1024;
+    private static final Color BG_COLOR       = new Color(0xB2EBF2); 
 
     public String sourceFileName, sourcePath, destFolder,fileExtention;
     public String transferId="000";
@@ -48,7 +49,7 @@ public class ResumeFileTransfer extends ProgressBar {
                 // please device disconnected during transfer, show message and return to main menu
                 dispose();
                 SwingUtilities.invokeLater(() -> {
-                    new DeviceDisconnectedMsg().setVisible(true);
+                    new RequestForReconnectDevice().setVisible(true);
                 });
                 
             }
@@ -207,7 +208,7 @@ public class ResumeFileTransfer extends ProgressBar {
 
                         SwingUtilities.invokeLater(() -> {
                             dispose();
-                            new App().setVisible(true);
+                            new RequestForReconnectDevice().setVisible(true);
                         });
 
                     }
@@ -233,7 +234,7 @@ public class ResumeFileTransfer extends ProgressBar {
                         DatabaseManager.updateTransfer(transferId, "Interrupted", String.valueOf(interruptStatus+1), transferPercentage);
                         SwingUtilities.invokeLater(() -> {
                             dispose();
-                            new App().setVisible(true);
+                            new RequestForReconnectDevice().setVisible(true);
                         });
 
                     }
@@ -364,8 +365,12 @@ public class ResumeFileTransfer extends ProgressBar {
         optionPane.setPreferredSize(new Dimension(450, 150));
            label.setFont(new Font("Arial", Font.PLAIN, 14));
 
+
         JDialog dialog = optionPane.createDialog(this, "Log Missing");
         dialog.setIconImage(scaledImg);
+        // FIX: recursively set BG_COLOR on every nested component
+        setBackgroundRecursive(optionPane, BG_COLOR);
+        dialog.getContentPane().setBackground(BG_COLOR);
         dialog.setVisible(true);
 
         return (int) optionPane.getValue();
@@ -388,15 +393,24 @@ public class ResumeFileTransfer extends ProgressBar {
 
         JDialog dialog = optionPane.createDialog(this, "Confirm");
         dialog.setIconImage(scaledImg);
+        // FIX: recursively set BG_COLOR on every nested component
+        setBackgroundRecursive(optionPane, BG_COLOR);
+        dialog.getContentPane().setBackground(BG_COLOR);
         dialog.setVisible(true);
 
         return (int) optionPane.getValue();
     }
 
 
-
-
-
+    // Recursively walks every child component and sets background
+    private void setBackgroundRecursive(Component component, Color color) {
+        component.setBackground(color);
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
+                setBackgroundRecursive(child, color);
+            }
+        }
+    }
 
 
 
@@ -413,6 +427,7 @@ public class ResumeFileTransfer extends ProgressBar {
             return text;
         return text.substring(0, maxLength) + "...";
     }
+
 
 
 }

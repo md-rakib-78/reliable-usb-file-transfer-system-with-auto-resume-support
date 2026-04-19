@@ -9,10 +9,10 @@ import java.util.concurrent.Flow;
 public class App extends JFrame {
 
     // ── Colors (match your teal/mint theme) ──────────────────────────────────
-    private static final Color BG_HEADER = new Color(160, 220, 220); // teal header
-    private static final Color BG_MAIN = new Color(240, 248, 248); // light body
-    private static final Color BTN_ACTIVE = new Color(255, 255, 255); // white active tab
-    private static final Color BTN_INACTIVE = new Color(100, 110, 115); // dark inactive tab
+    private static final Color BG_HEADER = new Color(160, 220, 220);
+    private static final Color BG_MAIN = new Color(240, 248, 248); 
+    private static final Color BTN_ACTIVE = new Color(255, 255, 255); 
+    private static final Color BTN_INACTIVE = new Color(100, 110, 115); 
     private static final Color CARD_BG = Color.WHITE;
 
     transferAttribute transferAttr = new transferAttribute();
@@ -577,6 +577,9 @@ public class App extends JFrame {
         }
     }
 
+
+    
+
     // Utility to shorten long paths for display
     private String shorten(String text, int maxLength) {
         if (text.length() <= maxLength)
@@ -584,8 +587,12 @@ public class App extends JFrame {
         return text.substring(0, maxLength) + "...";
     }
 
+
+
     public static void main(String[] args) {
+
         try {
+            new Thread(new USBwatcher()).start();
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }

@@ -1,10 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
 
 public class InterruptedTransferStatus extends JFrame {
+
+    private static final File LOG_FILE = new File("connected_drives.txt");
 
     private static final Color BG_COLOR       = new Color(0xB2EBF2);  
     private static final Color PANEL_BG       = new Color(0xB2EBF2);
@@ -112,18 +117,51 @@ public class InterruptedTransferStatus extends JFrame {
                 resumeButton.setFocusPainted(false);
                 resumeButton.setToolTipText("Click to resume the interrupted transfer");
                 resumeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                resumeButton.setOpaque(true); // FIX
-                resumeButton.setContentAreaFilled(true); // FIX
-                resumeButton.setBorderPainted(false); // FIX
+                resumeButton.setOpaque(true);
+                resumeButton.setContentAreaFilled(true);
+                resumeButton.setBorderPainted(false); 
 
                 resumeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        dispose();
-                        new ResumeFileTransfer(InterruptedTransferStatus.sourceFileName, InterruptedTransferStatus.sourcePath, InterruptedTransferStatus.destFolder, InterruptedTransferStatus.transferId);
+
+
+                        List<jsonAttribute> all = DatabaseManager.readTransfers();
+                        for (jsonAttribute tr : all) {
+                            
+                            if(tr.transferId.equals(InterruptedTransferStatus.transferId)) {
+                                InterruptedTransferStatus.sourceFileName = tr.fileName;
+                                InterruptedTransferStatus.sourcePath = tr.sourcePath;
+                                InterruptedTransferStatus.destFolder = tr.destinationPath;
+                                InterruptedTransferStatus.transferId = tr.transferId;
+                                break;
+                            }
+
+                        }
+
+                        List<String> driveLetters = getDriveLetters();
+
+                        char first = InterruptedTransferStatus.destFolder.charAt(0);
+                        String search = String.valueOf(first);
+
+                        if (isDriveConnected(search)) {
+                            System.out.println("Drive " + search + " is connected.");
+                            dispose();
+                            new ResumeFileTransfer(InterruptedTransferStatus.sourceFileName,
+                                    InterruptedTransferStatus.sourcePath, InterruptedTransferStatus.destFolder,
+                                    InterruptedTransferStatus.transferId);
+                        } else {
+                            
+                            dispose();
+                            SwingUtilities.invokeLater(() -> {
+                                new RequestForReconnectDevice().setVisible(true);
+                            });
+
+                        }
                     }
                 });
                 bottomPanel.add(resumeButton);
+
 
                 JButton cancelButton = new JButton("Cancel Transfer");
                 cancelButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -154,9 +192,51 @@ public class InterruptedTransferStatus extends JFrame {
         setVisible(true);
     }
 
+
+
+
     private String shorten(String text, int maxLength) {
         if (text.length() <= maxLength)
             return text;
         return text.substring(0, maxLength) + ".....";
     }
+
+    public static List<String> getDriveLetters() {
+
+        List<String> letters = new ArrayList<>();
+
+        if (!LOG_FILE.exists() || LOG_FILE.length() == 0)
+            return letters;
+
+        try {
+            List<String> lines = Files.readAllLines(LOG_FILE.toPath());
+
+            for (String line : lines) {
+
+                if (line != null && line.length() > 0) {
+                    String letter = String.valueOf(line.charAt(0));
+                    if (letter.matches("[A-Za-z]")) {
+                        letters.add(letter.toUpperCase());
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return letters;
+    }
+
+    // Returns true if the given drive letter exists in connected_drives.txt
+    public static boolean isDriveConnected(String letter) {
+
+        if (letter == null || letter.trim().isEmpty())
+            return false;
+
+        return getDriveLetters().contains(letter.toUpperCase());
+    }
+
+
+
 }

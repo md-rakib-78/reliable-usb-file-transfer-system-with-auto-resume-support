@@ -1,19 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DeviceDisconnectedMsg extends JFrame {
+public class DeviceConnectedMsg extends JFrame {
 
     private static final Color BG_COLOR       = new Color(0xB2EBF2);  
     private static final Color PANEL_BG       = new Color(0xB2EBF2);
     private static final Color CANCEL_COLOR   = new Color(0xEF5350);
 
 
-    public DeviceDisconnectedMsg() {
+    public DeviceConnectedMsg() {
 
 
-        setTitle("Disconnected Device");
+        setTitle("Connected Device");
         setSize(500, 330);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,7 +35,7 @@ public class DeviceDisconnectedMsg extends JFrame {
         panel.setLayout(new GridLayout(2, 1, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
 
-        ImageIcon icon1 = new ImageIcon(getClass().getResource("/assets/icon/disconnect_usb2.png"));
+        ImageIcon icon1 = new ImageIcon(getClass().getResource("/assets/icon/connect_usb.png"));
         Image img1 = icon1.getImage();
         Image scaledImg1 = img1.getScaledInstance(90, 90, Image.SCALE_SMOOTH);
 
@@ -42,7 +43,7 @@ public class DeviceDisconnectedMsg extends JFrame {
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(iconLabel);
 
-        JLabel statusLabel = new JLabel("Device Disconnected");
+        JLabel statusLabel = new JLabel("Your device is connected successfully !");
         statusLabel.setFont(new Font("Arial", Font.BOLD, 20));
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(statusLabel);
@@ -88,5 +89,12 @@ public class DeviceDisconnectedMsg extends JFrame {
             e.printStackTrace();
         }
 
+    }
+
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new DeviceConnectedMsg();
+        });
     }
 }
