@@ -47,6 +47,9 @@ public class DeviceConnectedMsg extends JFrame {
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(statusLabel);
 
+    
+
+
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBackground(PANEL_BG);
@@ -85,12 +88,5 @@ public class DeviceConnectedMsg extends JFrame {
             e.printStackTrace();
         }
 
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new DeviceConnectedMsg();
-        });
     }
 }

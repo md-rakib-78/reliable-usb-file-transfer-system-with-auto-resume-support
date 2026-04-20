@@ -77,9 +77,32 @@
     "sourcePath": "D:/Entertainment/Web Series/Kaleidoscope/Kaleidoscope.S01E05.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "destinationPath": "H://Kaleidoscope.S01E05.720p.10bit.WEB-DL.Hindi.English.AAC.5.1.ESub.HEVC-MLWBD.com.mkv",
     "fileExtension": "mkv",
-    "transferStatus": "Interrupted",
-    "transferPercentage": "46.27",
+    "transferStatus": "Completed",
+    "transferPercentage": "100.00",
     "fileSize": "293",
-    "interruptStatus": "2"
+    "interruptStatus": "3"
+  },
+  {
+    "si": "8",
+    "transferId": "T0008",
+    "fileName": "Demo video.mkv",
+    "sourcePath": "D:/Demo video.mkv",
+    "destinationPath": "F://Demo video.mkv",
+    "fileExtension": "mkv",
+    "transferStatus": "Completed",
+    "transferPercentage": "100.00",
+    "fileSize": "1029",
+    "interruptStatus": "1"
+  },
+  {
+    "si": "9",
+    "transferId": "T202306010009",
+    "fileName": "Demo video.mkv",
+    "sourcePath": "D:/Demo video.mkv",
+    "destinationPath": "E://Demo video.mkv",
+    "fileExtension": "mkv",
+    "transferStatus": "Completed",
+    "fileSize": "1029",
+    "interruptStatus": "0"
   }
 ]

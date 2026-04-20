@@ -9,6 +9,5 @@ public class jsonAttribute {
         public String transferStatus;
         public String transferPercentage;
         public String fileSize;
-        public String interruptStatus;
-    
+        public String interruptStatus; 
 }

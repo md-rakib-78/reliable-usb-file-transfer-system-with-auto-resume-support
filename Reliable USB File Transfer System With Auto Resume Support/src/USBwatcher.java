@@ -120,8 +120,4 @@ public class USBwatcher implements Runnable {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        new Thread(new USBwatcher()).start();
-    }
 }

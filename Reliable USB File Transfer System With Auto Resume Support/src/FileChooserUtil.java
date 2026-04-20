@@ -13,63 +13,57 @@ public class FileChooserUtil {
     public static void chooseFile() {
 
         try {
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {
-        }
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
 
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select a file");
+        Frame frame = new Frame();
+        frame.setUndecorated(true);
 
-        JFrame frame = new JFrame();
-        frame.setUndecorated(true); 
-        frame.setLocationRelativeTo(null); 
-
-        Image icon = new ImageIcon(FileChooserUtil.class.getResource("/assets/img/logo_icon.png")).getImage();
+        Image icon = new ImageIcon(
+                FileChooserUtil.class.getResource("/assets/img/logo_icon.png")
+        ).getImage();
 
         frame.setIconImage(icon);
 
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        FileDialog fd = new FileDialog(frame, "Select a file", FileDialog.LOAD);
+        fd.setDirectory(System.getProperty("user.home"));
 
-        int result = fileChooser.showOpenDialog(frame);
+        fd.setVisible(true);
+
+        String file = fd.getFile();
+        String dir  = fd.getDirectory();
 
         frame.dispose();
 
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+        if (file != null && dir != null) {
+            File selected = new File(dir, file);
 
-            selectedPath = file.getAbsolutePath().replace("\\", "/");
-            selectedFileName = file.getName();
+            selectedPath = selected.getAbsolutePath().replace("\\", "/");
+            selectedFileName = selected.getName();
         }
     }
 
 
 
-
     public static void chooseFolderAndGetPath() {
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
 
         JFileChooser folderChooser = new JFileChooser();
         folderChooser.setDialogTitle("Select a Folder");
-        folderChooser.setCurrentDirectory(
-                new File(System.getProperty("user.home")));
-
+        folderChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         folderChooser.setAcceptAllFileFilterUsed(false);
-
         JFrame frame = new JFrame();
         frame.setUndecorated(true);
-
-        Image icon = new ImageIcon(
-                FileChooserUtil.class.getResource("/assets/img/logo_icon.png")).getImage();
+        Image icon = new ImageIcon(FileChooserUtil.class.getResource("/assets/img/logo_icon.png")).getImage();
         frame.setIconImage(icon);
 
         int result = folderChooser.showOpenDialog(frame); 
 
-        frame.dispose(); 
+        frame.dispose();
 
         if (result == JFileChooser.APPROVE_OPTION) {
             String convert = folderChooser.getSelectedFile().getAbsolutePath();
@@ -77,5 +71,4 @@ public class FileChooserUtil {
             SelectedDestinationFolder = desConverted.concat("/" + selectedFileName);
         }
     }
-
 }

@@ -128,11 +128,4 @@ public class ProgressBar extends JFrame implements ActionListener {
 
     }
 
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ProgressBar::new);   
-    }
-
-
 }

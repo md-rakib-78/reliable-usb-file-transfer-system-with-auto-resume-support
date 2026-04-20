@@ -18,7 +18,6 @@ import java.util.Scanner;
 
 public class App extends JFrame {
 
-    // ── Colors (match your teal/mint theme) ──────────────────────────────────
     private static final Color BG_HEADER = new Color(160, 220, 220);
     private static final Color BG_MAIN = new Color(240, 248, 248); 
     private static final Color BTN_ACTIVE = new Color(255, 255, 255); 
@@ -32,9 +31,21 @@ public class App extends JFrame {
     transferAttribute transferAttr = new transferAttribute();
 
     public App() {
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        int sw = (screenWidth/2 + screenWidth/3);
+
+        System.out.println("screen w: "+ screenWidth);
+        System.out.println("screen H: "+ screenHeight);
+
+
         setTitle("Reliable File Transfer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1280, 780);
+        setSize(sw, 780);
+        setMinimumSize(new Dimension(sw, 780));
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(BG_MAIN);
@@ -45,25 +56,23 @@ public class App extends JFrame {
         setIconImage(scaledImg);
 
         add(buildTopBar(), BorderLayout.NORTH);
-        add(buildSrcDestPanel(), BorderLayout.CENTER); // wrapped together below
+        add(buildSrcDestPanel(), BorderLayout.CENTER); 
         setVisible(true);
     }
 
 
 
     
-    // TOP BAR (logo + nav tabs + window controls)
-    
+    //Top bar
     private JPanel buildTopBar() {
         JPanel bar = new JPanel(new BorderLayout());
         bar.setBackground(BG_HEADER);
         bar.setBorder(BorderFactory.createEmptyBorder(20, 12, 20, 12));
 
-        // ── Logo area (left) ───────────────────────────────────────────────
+
         JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         logoPanel.setOpaque(false);
 
-        // Logo icon fetch
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/img/logo_icon.png"));
         Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(img);
@@ -71,16 +80,17 @@ public class App extends JFrame {
 
         JLabel logoText = new JLabel("RELIABLE FILE TRANSFER");
         logoText.setFont(new Font("SansSerif", Font.BOLD, 25));
+       // logoText. setMinimumSize(new Dimension(280, 80));
         logoText.setForeground(new Color(50, 50, 90));
 
         logoPanel.add(logoIcon);
         logoPanel.add(logoText);
 
-        // ── Nav tabs (center) ────────────────────────────────────────────────
+        //Nav tabs (center)
         JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
         navPanel.setOpaque(false);
 
-        String[] tabs = { "FILE TRANSFER", "CONVERT .ZIP", "EXTRACT ZIP", "EX. DRIVE INFO" };
+        String[] tabs = { "FILE TRANSFER", "FILE LOCK", "FILE UNLOCK", "EX. DRIVE INFO" };
 
         for (int i = 0; i < tabs.length; i++) {
             btn = new JButton(tabs[i]);
@@ -126,7 +136,7 @@ public class App extends JFrame {
         return wrapper;
     }
 
-    // ── Hero card: SRC button, DEST button, USB illustration ─────────────────
+    // ── Hero card: SRC button, DEST button, USB illustration 
     private JPanel buildHeroCard() {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
@@ -144,12 +154,12 @@ public class App extends JFrame {
 
         // Right: USB image placeholder
         JLabel usbImg = new JLabel();
-        usbImg.setPreferredSize(new Dimension(620, 120));
+        usbImg.setPreferredSize(new Dimension(420, 120));
         usbImg.setHorizontalAlignment(SwingConstants.RIGHT);
 
         // Logo icon fetch
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/img/wallpaper.jpg"));
-        Image img = icon.getImage().getScaledInstance(520, 120, Image.SCALE_SMOOTH);
+        Image img = icon.getImage().getScaledInstance(320, 120, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(img);
         usbImg.setIcon(resizedIcon);
 
@@ -160,6 +170,7 @@ public class App extends JFrame {
         driveText.setFont(new Font("Monospaced", Font.PLAIN, 12));
         driveText.setBackground(Color.black);
         driveText.setForeground(new Color(100, 255, 100));
+
 
         driveShow = new JScrollPane(driveText);
         driveShow.setPreferredSize(new Dimension(250, 120));
@@ -184,16 +195,30 @@ public class App extends JFrame {
 
                         if (changed.toString().equals("connected_drives.txt")) {
 
-                            // Update UI safely
                             SwingUtilities.invokeLater(() -> {
                                 driveText.setText(""); // clear first
 
+                                boolean hasData = false;
+
                                 try (Scanner scanner = new Scanner(new File("connected_drives.txt"))) {
                                     while (scanner.hasNextLine()) {
-                                        driveText.append(scanner.nextLine() + "\n");
+                                        String line = scanner.nextLine().trim();
+
+                                        if (!line.isEmpty()) {
+                                            driveText.append(line + "\n");
+                                            hasData = true;
+                                        }
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
+                                }
+
+                                // Show hint if no data found
+                                if (!hasData) {
+                                    driveText.setText("No drive data available...");
+                                    driveText.setForeground(Color.GRAY);
+                                } else {
+                                    driveText.setForeground(new Color(100, 255, 100)); // green color
                                 }
                             });
                         }
@@ -213,8 +238,8 @@ public class App extends JFrame {
 
             @Override
             protected void configureScrollBarColors() {
-                this.thumbColor = Color.BLACK; // draggable part
-                this.trackColor = Color.LIGHT_GRAY; // background track
+                this.thumbColor = Color.BLACK; 
+                this.trackColor = Color.LIGHT_GRAY; 
             }
 
             @Override
@@ -229,7 +254,7 @@ public class App extends JFrame {
 
             private JButton createZeroButton() {
                 JButton button = new JButton();
-                button.setPreferredSize(new Dimension(0, 0)); // hide arrows
+                button.setPreferredSize(new Dimension(0, 0));
                 return button;
             }
         });
@@ -243,8 +268,6 @@ public class App extends JFrame {
         return card;
     }
 
-
-    //Bar Scroll Bar color set
 
 
     // Circular folder button used for SRC and DEST.
@@ -511,7 +534,6 @@ public class App extends JFrame {
         System.out.println("Tab selected: " + tabName + " (index " + index + ")");
         if(index == 3 && buttonClickCount == 0)
         {
-            System.out.println("rakib");
             driveShow.setVisible(true);
             driveShow.getParent().revalidate(); 
             driveShow.getParent().repaint();
@@ -525,6 +547,15 @@ public class App extends JFrame {
             btn.setBackground(BTN_INACTIVE);
             btn.setForeground(BTN_ACTIVE);
             buttonClickCount = 0;
+        }
+
+        else if(index == 1)
+        {
+            new FileLock().setVisible(true);
+        }
+        else if (index == 2)
+        {
+            new FileUnlock().setVisible(true);
         }
 
 

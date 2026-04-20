@@ -84,10 +84,4 @@ public class RequestForReconnectDevice extends JFrame {
 
     }
 
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new RequestForReconnectDevice();
-        });
-    }
 }
