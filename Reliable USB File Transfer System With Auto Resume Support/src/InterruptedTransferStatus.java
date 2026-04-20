@@ -139,7 +139,6 @@ public class InterruptedTransferStatus extends JFrame {
 
                         }
 
-                        List<String> driveLetters = getDriveLetters();
 
                         char first = InterruptedTransferStatus.destFolder.charAt(0);
                         String search = String.valueOf(first);

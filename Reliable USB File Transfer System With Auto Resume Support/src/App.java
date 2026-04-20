@@ -1,9 +1,19 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
+import static java.nio.file.StandardWatchEventKinds.*;
+import java.util.Scanner;
 import java.util.concurrent.Flow;
 
 public class App extends JFrame {
@@ -14,6 +24,10 @@ public class App extends JFrame {
     private static final Color BTN_ACTIVE = new Color(255, 255, 255); 
     private static final Color BTN_INACTIVE = new Color(100, 110, 115); 
     private static final Color CARD_BG = Color.WHITE;
+
+    private JScrollPane driveShow;
+    private int buttonClickCount = 0;
+    private JButton btn;
 
     transferAttribute transferAttr = new transferAttribute();
 
@@ -66,22 +80,24 @@ public class App extends JFrame {
         JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
         navPanel.setOpaque(false);
 
-        String[] tabs = { "FILE TRANSFER", "CONVERT .ZIP", "EXTRACT ZIP", ".LOG FILE" };
+        String[] tabs = { "FILE TRANSFER", "CONVERT .ZIP", "EXTRACT ZIP", "EX. DRIVE INFO" };
 
         for (int i = 0; i < tabs.length; i++) {
-            JButton btn = new JButton(tabs[i]);
+            btn = new JButton(tabs[i]);
             btn.setFont(new Font("SansSerif", Font.BOLD, 12));
             btn.setFocusPainted(false);
             btn.setBorderPainted(false);
             btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             btn.setPreferredSize(new Dimension(130, 34));
-            if (i == 0) { // active tab
+            btn.setBackground(BTN_INACTIVE);
+            btn.setForeground(Color.WHITE);
+
+            if(i == 0)
+            {
                 btn.setBackground(BTN_ACTIVE);
-                btn.setForeground(new Color(50, 50, 90));
-            } else {
-                btn.setBackground(BTN_INACTIVE);
-                btn.setForeground(Color.WHITE);
+                btn.setForeground(BTN_INACTIVE);
             }
+            
             final int idx = i;
             btn.addActionListener(e -> onTabSelected(idx, tabs[idx]));
             navPanel.add(btn);
@@ -135,13 +151,101 @@ public class App extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/img/wallpaper.jpg"));
         Image img = icon.getImage().getScaledInstance(520, 120, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(img);
-
         usbImg.setIcon(resizedIcon);
 
+
+        // Drive Info display
+        JTextArea driveText = new JTextArea();
+        driveText.setEditable(false);
+        driveText.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        driveText.setBackground(Color.black);
+        driveText.setForeground(new Color(100, 255, 100));
+
+        driveShow = new JScrollPane(driveText);
+        driveShow.setPreferredSize(new Dimension(250, 120));
+        driveShow.setMinimumSize(new Dimension(200, 100));
+        driveShow.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        driveShow.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        driveShow.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+
+    
+        Path path = Paths.get("."); // current folder
+
+        new Thread(() -> {
+            try {
+                WatchService watchService = FileSystems.getDefault().newWatchService();
+                path.register(watchService, ENTRY_MODIFY);
+
+                while (true) {
+                    WatchKey key = watchService.take(); // waits for change
+
+                    for (WatchEvent<?> event : key.pollEvents()) {
+                        Path changed = (Path) event.context();
+
+                        if (changed.toString().equals("connected_drives.txt")) {
+
+                            // Update UI safely
+                            SwingUtilities.invokeLater(() -> {
+                                driveText.setText(""); // clear first
+
+                                try (Scanner scanner = new Scanner(new File("connected_drives.txt"))) {
+                                    while (scanner.hasNextLine()) {
+                                        driveText.append(scanner.nextLine() + "\n");
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
+                    key.reset();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+
+
+        // Styling
+        driveShow.getViewport().setBackground(BG_HEADER);
+        driveShow.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.BLACK; // draggable part
+                this.trackColor = Color.LIGHT_GRAY; // background track
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0)); // hide arrows
+                return button;
+            }
+        });
+
+        
+
+        driveShow.setVisible(false);
         card.add(btnArea, BorderLayout.WEST);
+        card.add(driveShow,BorderLayout.CENTER);
         card.add(usbImg, BorderLayout.EAST);
         return card;
     }
+
+
+    //Bar Scroll Bar color set
+
 
     // Circular folder button used for SRC and DEST.
     private JPanel buildFolderCircleBtn(String label, Color bgColor, String actionId) {
@@ -405,7 +509,25 @@ public class App extends JFrame {
     /** Fired when a nav tab is clicked. */
     private void onTabSelected(int index, String tabName) {
         System.out.println("Tab selected: " + tabName + " (index " + index + ")");
-        // TODO: swap the center panel content to match the selected tab
+        if(index == 3 && buttonClickCount == 0)
+        {
+            System.out.println("rakib");
+            driveShow.setVisible(true);
+            driveShow.getParent().revalidate(); 
+            driveShow.getParent().repaint();
+            btn.setBackground(BTN_ACTIVE);
+            btn.setForeground(BTN_INACTIVE);
+            buttonClickCount=1;
+        }
+        else if (index == 3 && buttonClickCount == 1)
+        {
+            driveShow.setVisible(false);
+            btn.setBackground(BTN_INACTIVE);
+            btn.setForeground(BTN_ACTIVE);
+            buttonClickCount = 0;
+        }
+
+
     }
 
     // Action Source and Destination button
@@ -569,9 +691,6 @@ public class App extends JFrame {
                 }
 
             }
-
-
-
 
             System.out.println("Status button clicked in row " + row + ": " + status);
         }
