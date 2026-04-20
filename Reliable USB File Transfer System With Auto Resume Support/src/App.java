@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.nio.file.StandardWatchEventKinds.*;
 import java.util.Scanner;
-import java.util.concurrent.Flow;
+
 
 public class App extends JFrame {
 
@@ -661,7 +661,7 @@ public class App extends JFrame {
     /** Fired when a data row is clicked (not the status button). */
     private void onRowClicked(int row, DefaultTableModel model) {
         System.out.println("Row clicked: " + row + " — " + model.getValueAt(row, 2));
-        // TODO
+        //
     }
 
     // Completed/Interrupted status button click handler

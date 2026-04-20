@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,9 +46,6 @@ public class DeviceConnectedMsg extends JFrame {
         statusLabel.setFont(new Font("Arial", Font.BOLD, 20));
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(statusLabel);
-
-    
-
 
 
         JPanel bottomPanel = new JPanel();
