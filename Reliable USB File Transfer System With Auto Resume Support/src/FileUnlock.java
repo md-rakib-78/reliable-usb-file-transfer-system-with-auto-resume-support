@@ -14,6 +14,7 @@ public class FileUnlock extends JFrame {
     private JButton unlockBtn;
 
     private static final Color BG_COLOR = new Color(0xB2EBF2);
+        private static final Color PROGRESS_FILL  = new Color(0x76E000); 
     private static final Color BTN_INACTIVE = new Color(100, 110, 115);
 
     public FileUnlock() {
@@ -76,7 +77,7 @@ public class FileUnlock extends JFrame {
         pathField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         pathField.setPreferredSize(new Dimension(0, 34));
 
-        JButton browseBtn = actionButton("Browse…", new Color(60, 110, 180));
+        JButton browseBtn = actionButton("Browse…", new Color(100, 200, 210));
         browseBtn.addActionListener(e -> browse());
 
         pathPanel.add(pathField, BorderLayout.CENTER);
@@ -98,7 +99,7 @@ public class FileUnlock extends JFrame {
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
         // Button
-        unlockBtn = actionButton("UNLOCK NOW", new Color(34, 130, 50));
+        unlockBtn = actionButton("UNLOCK NOW",PROGRESS_FILL);
         unlockBtn.setFont(new Font("Segoe UI", Font.BOLD, 15));
         unlockBtn.setPreferredSize(new Dimension(80, 40));
         unlockBtn.addActionListener(e -> performUnlock());

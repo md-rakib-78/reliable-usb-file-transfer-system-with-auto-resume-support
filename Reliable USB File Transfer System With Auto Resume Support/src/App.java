@@ -184,16 +184,16 @@ public class App extends JFrame {
 
         new Thread(() -> {
             try {
-                WatchService watchService = FileSystems.getDefault().newWatchService();
-                path.register(watchService, ENTRY_MODIFY);
+                // WatchService watchService = FileSystems.getDefault().newWatchService();
+                // path.register(watchService, ENTRY_MODIFY);
 
                 while (true) {
-                    WatchKey key = watchService.take(); // waits for change
+                    // WatchKey key = watchService.take(); // waits for change
 
-                    for (WatchEvent<?> event : key.pollEvents()) {
-                        Path changed = (Path) event.context();
+                    // for (WatchEvent<?> event : key.pollEvents()) {
+                    //     Path changed = (Path) event.context();
 
-                        if (changed.toString().equals("connected_drives.txt")) {
+                       // if (changed.toString().equals("connected_drives.txt")) {
 
                             SwingUtilities.invokeLater(() -> {
                                 driveText.setText(""); // clear first
@@ -218,12 +218,12 @@ public class App extends JFrame {
                                     driveText.setText("No drive data available...");
                                     driveText.setForeground(Color.GRAY);
                                 } else {
-                                    driveText.setForeground(new Color(100, 255, 100)); // green color
+                                    driveText.setForeground(new Color(100, 255, 100)); 
                                 }
                             });
-                        }
-                    }
-                    key.reset();
+                        // }
+                   // }
+                    //key.reset();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

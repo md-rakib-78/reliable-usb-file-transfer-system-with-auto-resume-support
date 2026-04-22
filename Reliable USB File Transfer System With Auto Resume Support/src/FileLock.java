@@ -5,7 +5,6 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.io.*;
 import java.security.*;
-import java.security.spec.*;
 import java.util.Arrays;
 
 
@@ -29,6 +28,7 @@ public class FileLock extends JFrame {
 
     private static final Color BG_COLOR     = new Color(0xB2EBF2);
     private static final Color BTN_INACTIVE = new Color(100, 110, 115);
+    private static final Color CANCEL_COLOR   = new Color(0xEF5350);
 
 
     public FileLock() {
@@ -90,7 +90,7 @@ public class FileLock extends JFrame {
         pathField = new JTextField();
         pathField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         pathField.setPreferredSize(new Dimension(0, 34));
-        JButton browseBtn = actionButton("Browse…", new Color(60, 110, 180));
+        JButton browseBtn = actionButton("Browse…", new Color(100, 200, 210));
         browseBtn.addActionListener(e -> browse());
         pathPanel.add(pathField, BorderLayout.CENTER);
         pathPanel.add(browseBtn, BorderLayout.EAST);
@@ -110,7 +110,7 @@ public class FileLock extends JFrame {
         statusLabel = new JLabel(" ", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-        lockBtn = actionButton("LOCK NOW", new Color(190, 45, 45));
+        lockBtn = actionButton("LOCK NOW", CANCEL_COLOR);
         lockBtn.setFont(new Font("Segoe UI", Font.BOLD, 15));
         lockBtn.setPreferredSize(new Dimension(80, 40));
         lockBtn.addActionListener(e -> performLock());
