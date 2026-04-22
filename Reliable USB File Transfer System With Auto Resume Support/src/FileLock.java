@@ -176,6 +176,42 @@ private void browse() {
 
         if (path.isEmpty())               { status("Select a file.", Color.RED); return; }
         if (pw.length < 4)               { status("Password must be at least 4 characters.", Color.RED); return; }
+
+       
+        String password = new String(pw);
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasDigit = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c))
+                hasUpper = true;
+            if (Character.isLowerCase(c))
+                hasLower = true;
+            if (Character.isDigit(c)) 
+                hasDigit = true;
+            
+        }
+
+        if (!hasDigit) {
+            status("Password must contain at least one digit (0-9)!", Color.RED);
+            return;
+        }
+
+        if (!hasUpper) {
+            status("Password must contain at least one uppercase letter (A-Z)!", Color.RED);
+            return;
+        }
+        if (!hasLower) {
+            status("Password must contain at least one lowercase letter (a-z)!", Color.RED);
+            return;
+        }
+        if (!password.matches(".*[^a-zA-Z0-9].*")) {
+            status("Password must contain at least one special character (!@#$%&?)!", Color.RED);
+            return;
+        }
+
         if (!Arrays.equals(pw, confirm)) { status("Passwords do not match!", Color.RED); return; }
 
         File target = new File(path);

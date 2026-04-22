@@ -729,8 +729,6 @@ public class App extends JFrame {
 
 
     
-
-    // Utility to shorten long paths for display
     private String shorten(String text, int maxLength) {
         if (text.length() <= maxLength)
             return text;
