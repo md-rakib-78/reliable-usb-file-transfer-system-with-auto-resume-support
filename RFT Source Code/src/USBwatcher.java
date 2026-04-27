@@ -5,8 +5,8 @@ import javax.swing.filechooser.FileSystemView;
 
 public class USBwatcher implements Runnable {
 
-    private static final File   LOG_FILE       = new File("connected_drives.txt");
-    private Set<String>         previousDrives = new HashSet<>();
+    private static final File LOG_FILE = new File(System.getenv("APPDATA") + "\\RFT\\connected_drives.txt");
+    private Set<String> previousDrives = new HashSet<>();
 
     @Override
     public void run() {

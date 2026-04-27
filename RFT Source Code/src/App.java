@@ -24,6 +24,7 @@ public class App extends JFrame {
     private static final Color BTN_INACTIVE = new Color(100, 110, 115); 
     private static final Color CARD_BG = Color.WHITE;
 
+
     private JScrollPane driveShow;
     private int buttonClickCount = 0;
     private JButton btn;
@@ -31,6 +32,12 @@ public class App extends JFrame {
     transferAttribute transferAttr = new transferAttribute();
 
     public App() {
+
+        File appDataFolder = new File(System.getenv("APPDATA") + "\\RFT");
+        if (!appDataFolder.exists()) {
+            System.out.println("AppData folder not found, creating: " + appDataFolder.getAbsolutePath());
+            appDataFolder.mkdirs();
+        }
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -168,6 +175,8 @@ public class App extends JFrame {
         JTextArea driveText = new JTextArea();
         driveText.setEditable(false);
         driveText.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        driveText.setText("No drive data available...");
+        driveText.setForeground(Color.GRAY);
         driveText.setBackground(Color.black);
         driveText.setForeground(new Color(100, 255, 100));
 
@@ -179,56 +188,55 @@ public class App extends JFrame {
         driveShow.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         driveShow.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
 
-    
-        Path path = Paths.get("."); // current folder
+ Path path = Paths.get(System.getenv("APPDATA") + "\\RFT");
 
-        new Thread(() -> {
-            try {
-                WatchService watchService = FileSystems.getDefault().newWatchService();
-                path.register(watchService, ENTRY_MODIFY);
+new Thread(() -> {
+    try {
+        WatchService watchService = FileSystems.getDefault().newWatchService();
+        path.register(watchService, ENTRY_MODIFY);
 
-                while (true) {
-                    WatchKey key = watchService.take();
+        while (true) {
+            WatchKey key = watchService.take();
 
-                    for (WatchEvent<?> event : key.pollEvents()) {
-                        Path changed = (Path) event.context();
+            for (WatchEvent<?> event : key.pollEvents()) {
+                Path changed = (Path) event.context();
 
-                        if (changed.toString().equals("connected_drives.txt")) {
+                if (changed.toString().equals("connected_drives.txt")) {
 
-                            SwingUtilities.invokeLater(() -> {
-                                driveText.setText(""); // clear first
+                    SwingUtilities.invokeLater(() -> {
+                        driveText.setText("");
+                        boolean hasData = false;
 
-                                boolean hasData = false;
 
-                                try (Scanner scanner = new Scanner(new File("connected_drives.txt"))) {
-                                    while (scanner.hasNextLine()) {
-                                        String line = scanner.nextLine().trim();
+                        String filePath = System.getenv("APPDATA") + "\\RFT\\connected_drives.txt";
 
-                                        if (!line.isEmpty()) {
-                                            driveText.append(line + "\n");
-                                            hasData = true;
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                        try (Scanner scanner = new Scanner(new File(filePath))) {
+                            while (scanner.hasNextLine()) {
+                                String line = scanner.nextLine().trim();
+                                if (!line.isEmpty()) {
+                                    driveText.append(line + "\n");
+                                    hasData = true;
                                 }
-
-                                // Show hint if no data found
-                                if (!hasData) {
-                                    driveText.setText("No drive data available...");
-                                    driveText.setForeground(Color.GRAY);
-                                } else {
-                                    driveText.setForeground(new Color(100, 255, 100)); 
-                                }
-                            });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }
-                    key.reset();
+
+                        if (!hasData) {
+                            driveText.setText("No drive data available...");
+                            driveText.setForeground(Color.GRAY);
+                        } else {
+                            driveText.setForeground(new Color(100, 255, 100));
+                        }
+                    });
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }).start();
+            key.reset();
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}).start();
 
 
 
@@ -738,6 +746,32 @@ public class App extends JFrame {
 
 
     public static void main(String[] args) {
+
+        // NEW: Check if launched from Windows right-click with a file argument
+        if (args.length > 0) {
+            String filePath = args[0];
+            File file = new File(filePath);
+
+            if (file.exists() && file.isFile()) {
+                // If file ends with .locked → open FileUnlock
+                if (filePath.toLowerCase().endsWith(".locked")) {
+                    SwingUtilities.invokeLater(() -> {
+                        FileUnlock unlock = new FileUnlock();
+                        unlock.setFilePath(filePath); // auto-fill path
+                        unlock.setVisible(true);
+                    });
+                } else {
+                    // Any other file → open FileLock
+                    SwingUtilities.invokeLater(() -> {
+                        FileLock lock = new FileLock();
+                        lock.setFilePath(filePath); // auto-fill path
+                        lock.setVisible(true);
+                    });
+                }
+                return; // Don't open main App dashboard
+            }
+        }
+
 
         try {
             new Thread(new USBwatcher()).start();

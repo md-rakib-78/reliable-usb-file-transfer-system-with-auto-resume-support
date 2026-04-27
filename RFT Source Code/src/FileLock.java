@@ -348,4 +348,9 @@ private void browse() {
         return new File(System.getProperty("user.home"), "Desktop");
     }
 
+    public void setFilePath(String path) {
+        // Wait for UI to be built first, then set the path
+        SwingUtilities.invokeLater(() -> pathField.setText(path));
+    }
+
 }

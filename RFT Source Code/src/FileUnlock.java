@@ -312,4 +312,9 @@ public class FileUnlock extends JFrame {
         return new File(System.getProperty("user.home"), "Desktop");
     }
 
+    // ADD THIS METHOD — called from App.main() when launched via right-click
+    public void setFilePath(String path) {
+        SwingUtilities.invokeLater(() -> pathField.setText(path));
+    }
+
 }

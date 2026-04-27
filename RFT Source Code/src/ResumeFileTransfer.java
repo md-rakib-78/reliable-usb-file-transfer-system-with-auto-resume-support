@@ -147,8 +147,86 @@ public class ResumeFileTransfer extends ProgressBar {
             long totalCopied = resumePosition;
 
             String transferPercentage ="0";
+            
 
             while ((bytesRead = src.read(buffer)) != -1) {
+
+
+                //  PAUSE: freeze here until resumed
+                synchronized (pauseLock) {
+                    while (isPaused) {
+                        try {
+                            pauseLock.wait();
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+
+                // CANCEL: exit loop cleanly
+                if (isCancelled) {
+
+                    final String finalPercentage = transferPercentage;
+                    final int finalFileSizeMB = fileSizeMB;
+
+                    if (transferId.equals("000")) {
+
+                        int serialNo = 0;
+                        List<jsonAttribute> all = DatabaseManager.readTransfers();
+                        if (all == null)
+                            all = new ArrayList<>();
+
+                        for (jsonAttribute tr : all) {
+                            try {
+                                if (tr.si != null && !tr.si.isEmpty()) {
+                                    int current = Integer.parseInt(tr.si);
+                                    serialNo = Math.max(serialNo, current);
+                                }
+                            } catch (Exception a) {
+                            }
+                        }
+
+                        jsonAttribute t = new jsonAttribute();
+                        t.si = String.valueOf(serialNo + 1);
+                        t.transferId = "T2026" + String.format("%04d", serialNo + 1);
+                        t.fileName = sourceFileName != null ? sourceFileName : "";
+                        t.sourcePath = sourcePath != null ? sourcePath : "";
+                        t.destinationPath = destFolder != null ? destFolder : "";
+                        t.fileExtension = fileExtention != null ? fileExtention : "";
+                        t.fileSize = String.valueOf(finalFileSizeMB);
+                        t.interruptStatus = String.valueOf(interruptStatus + 1);
+                        t.transferStatus = "Interrupted"; //
+                        t.transferPercentage = finalPercentage != null ? finalPercentage : "0";
+                        DatabaseManager.addTransfer(t); 
+
+                    }
+    
+                    else {
+
+                        List<jsonAttribute> all = DatabaseManager.readTransfers();
+                        for (jsonAttribute tr : all) {
+                            if (transferId.equals(tr.transferId)) {
+                                try {
+                                    interruptStatus = Math.max(interruptStatus,
+                                            Integer.parseInt(tr.interruptStatus));
+                                } catch (Exception a) {
+                                }
+                            }
+                        }
+
+                        DatabaseManager.updateTransfer( transferId, "Interrupted",String.valueOf(interruptStatus + 1),finalPercentage);
+                    }
+
+                    SwingUtilities.invokeLater(() -> {
+                        dispose();
+                        new App().setVisible(true);
+                    });
+                    return;
+                }
+
+
+
+                
                 try {
                     dst.write(buffer, 0, bytesRead);
                     dst.getFD().sync();
@@ -195,7 +273,7 @@ public class ResumeFileTransfer extends ProgressBar {
 
                         jsonAttribute t = new jsonAttribute();
                         t.si = String.valueOf(serialNo + 1);
-                        t.transferId = "T" + String.format("%04d", serialNo + 1);
+                        t.transferId = "T2026" + String.format("%04d", serialNo + 1);
                         t.fileName = sourceFileName != null ? sourceFileName : "";
                         t.sourcePath = sourcePath != null ? sourcePath : "";
                         t.destinationPath = destFolder != null ? destFolder : "";
@@ -272,12 +350,13 @@ public class ResumeFileTransfer extends ProgressBar {
             jsonAttribute t = new jsonAttribute();
 
             t.si = String.valueOf(serialNo + 1);
-            t.transferId = "T20230601" + String.format("%04d", serialNo + 1);
+            t.transferId = "T2026" + String.format("%04d", serialNo + 1);
             t.fileName = sourceFileName != null ? sourceFileName : "";
             t.sourcePath = sourcePath != null ? sourcePath : "";
             t.destinationPath = destFolder != null ? destFolder : "";
             t.fileExtension = fileExtention != null ? fileExtention : "";
             t.fileSize = String.valueOf(fileSizeMB) != null ? String.valueOf(fileSizeMB) : "";
+            t.transferPercentage = transferPercentage != null ? transferPercentage : "0";
             t.interruptStatus= String.valueOf(interruptStatus);
             t.transferStatus = "Completed";
 

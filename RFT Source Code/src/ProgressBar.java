@@ -20,6 +20,11 @@ public class ProgressBar extends JFrame implements ActionListener {
     public JProgressBar progressBar;
     public JButton pauseBtn, cancelBtn;
 
+     //ADD THESE 3 — transfer control flags
+    public volatile boolean isPaused    = false;
+    public volatile boolean isCancelled = false;
+    public final Object     pauseLock   = new Object();
+
 
 
     public ProgressBar() {
@@ -118,14 +123,80 @@ public class ProgressBar extends JFrame implements ActionListener {
 
 
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        
-        if(e.getSource() == pauseBtn) {
-            System.out.println("PAUSE button clicked");
-        } else if(e.getSource() == cancelBtn) {
-            System.out.println("CANCEL button clicked");
-        }
 
+        if (e.getSource() == pauseBtn) {
+
+            synchronized (pauseLock) {
+
+                if (!isPaused) {
+               
+                    isPaused = true;
+                    pauseBtn.setText("RESUME");
+                    pauseBtn.setBackground(Color.decode("#9AD872"));
+                    System.out.println("Transfer PAUSED");
+
+                } else {
+                
+                    isPaused = false;
+                    pauseBtn.setText("PAUSE");
+                    pauseBtn.setBackground(PAUSE_COLOR);
+                    pauseLock.notifyAll(); // wake up waiting thread
+                    System.out.println("Transfer RESUMED");
+                }
+            }
+
+        } else if (e.getSource() == cancelBtn) {
+
+            int confirm = showCancelDialog();
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                synchronized (pauseLock) {
+                    isCancelled = true;
+                    isPaused    = false;     
+                    pauseLock.notifyAll();    
+                }
+                System.out.println("Transfer CANCELLED by user");
+            }
+        }
+    }
+
+    
+    private int showCancelDialog() {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/assets/img/logo_icon.png"));
+        Image img = icon.getImage();
+        Image scaledImg = img.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+
+        JLabel label = new JLabel("<html><center><br>Are you sure you want to cancel the transfer?<br>Progress will be saved and you can resume later.</br></center></html>");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        JOptionPane optionPane = new JOptionPane(label, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
+        optionPane.setPreferredSize(new Dimension(450, 150));
+
+        JDialog dialog = optionPane.createDialog(this, "Cancel Confirmation");
+        dialog.setIconImage(scaledImg);
+        // FIX: recursively set BG_COLOR on every nested component
+        setBackgroundRecursive(optionPane, BG_COLOR);
+        dialog.getContentPane().setBackground(BG_COLOR);
+        dialog.setVisible(true);
+
+        Object value = optionPane.getValue();
+        if (value == null || value.equals(JOptionPane.CLOSED_OPTION)) {
+            return JOptionPane.NO_OPTION; // treat X as No
+        }
+        return (int) value;
+    }
+
+    //ADD this method in ProgressBar.java
+    private void setBackgroundRecursive(Component component, Color color) {
+        component.setBackground(color);
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
+                setBackgroundRecursive(child, color);
+            }
+        }
     }
 
 }

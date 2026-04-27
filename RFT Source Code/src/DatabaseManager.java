@@ -6,7 +6,7 @@ import com.google.gson.*;
 public class DatabaseManager {
     
 
-    private static final String FILE_PATH = "history.json";
+    private static final String FILE_PATH = System.getenv("APPDATA") + "\\RFT\\history.json";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     // 🔹 Read all

@@ -9,7 +9,8 @@ import java.nio.file.Files;
 
 public class InterruptedTransferStatus extends JFrame {
 
-    private static final File LOG_FILE = new File("connected_drives.txt");
+
+private static final File DRIVES_FILE = new File(System.getenv("APPDATA") + "\\RFT\\connected_drives.txt");
 
     private static final Color BG_COLOR       = new Color(0xB2EBF2);  
     private static final Color PANEL_BG       = new Color(0xB2EBF2);
@@ -120,6 +121,7 @@ public class InterruptedTransferStatus extends JFrame {
                 resumeButton.setOpaque(true);
                 resumeButton.setContentAreaFilled(true);
                 resumeButton.setBorderPainted(false); 
+                
 
                 resumeButton.addActionListener(new ActionListener() {
                     @Override
@@ -204,11 +206,11 @@ public class InterruptedTransferStatus extends JFrame {
 
         List<String> letters = new ArrayList<>();
 
-        if (!LOG_FILE.exists() || LOG_FILE.length() == 0)
+        if (!DRIVES_FILE.exists() || DRIVES_FILE.length() == 0)
             return letters;
 
         try {
-            List<String> lines = Files.readAllLines(LOG_FILE.toPath());
+            List<String> lines = Files.readAllLines(DRIVES_FILE.toPath());
 
             for (String line : lines) {
 
