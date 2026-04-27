@@ -143,7 +143,7 @@ public class App extends JFrame {
         return wrapper;
     }
 
-    // ── Hero card: SRC button, DEST button, USB illustration 
+    // Hero card: SRC button, DEST button, USB illustration 
     private JPanel buildHeroCard() {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
